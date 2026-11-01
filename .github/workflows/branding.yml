@@ -1,0 +1,38 @@
+name: LibreGram branding checks
+
+on:
+  push:
+    branches:
+      - "**"
+    paths:
+      - "TMessagesProj/src/main/AndroidManifest.xml"
+      - "TMessagesProj/src/main/res/**"
+      - "settings.gradle"
+      - ".github/scripts/verify_libregram_branding.py"
+      - ".github/workflows/branding.yml"
+  pull_request:
+    paths:
+      - "TMessagesProj/src/main/AndroidManifest.xml"
+      - "TMessagesProj/src/main/res/**"
+      - "settings.gradle"
+      - ".github/scripts/verify_libregram_branding.py"
+      - ".github/workflows/branding.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate-branding:
+    name: Validate app identity and launcher icons
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Validate LibreGram branding
+        run: python .github/scripts/verify_libregram_branding.py
