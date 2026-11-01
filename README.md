@@ -1,5 +1,11 @@
 # LibreGram Android
 
+<div align="center">
+
+<img src="assets/libregram-logo.svg" width="128" alt="LibreGram logo">
+
+</div>
+
 **LibreGram Android** is an independent community project built on top of [exteraless](https://github.com/exteraless/exteraless), an open-source Telegram client fork.
 
 The repository is the home for LibreGram-specific development: app identity, carefully integrated improvements, and features that extend the upstream project without erasing its history or authorship.
