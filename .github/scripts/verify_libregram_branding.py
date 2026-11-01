@@ -14,7 +14,7 @@ RES = ROOT / "TMessagesProj" / "src" / "main" / "res"
 MANIFEST = ROOT / "TMessagesProj" / "src" / "main" / "AndroidManifest.xml"
 
 EXPECTED_LABELS = {
-    "Original", "Graphite", "Ocean", "Midnight", "Mint", "Violet",
+    "LibreGram", "Graphite", "Ocean", "Midnight", "Mint", "Violet",
     "Rose", "Ember", "Silver", "Cobalt", "Crimson", "Lime",
     "Sand", "Iris", "Ice", "Mono", "Night",
 }
