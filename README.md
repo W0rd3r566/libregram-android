@@ -1,170 +1,61 @@
-<div align="center">
+# LibreGram Android
 
-<img src="assets/logo.png" width="128" alt="exteraless">
+**LibreGram Android** is an independent community project built on top of [exteraless](https://github.com/exteraless/exteraless), an open-source Telegram client fork.
 
-# exteraless
+The repository is the home for LibreGram-specific development: app identity, carefully integrated improvements, and features that extend the upstream project without erasing its history or authorship.
 
-Открытая версия exteraGram — с моделью разрешений для плагинов
+> **Development status:** early development. This repository is a source fork, not a finished or officially supported app release. The LibreGram app-name, package-ID, icon, and release-signing migration is not complete yet.
 
-[![Канал](https://img.shields.io/badge/Telegram-@exteraless-2CA5E0?logo=telegram&logoColor=white)](https://t.me/exteraless)
+## Project goals
 
-</div>
+- **Respect upstream.** Preserve the original license, copyright notices, design credits, and third-party acknowledgements.
+- **Keep a maintainable fork.** Track upstream changes and avoid unnecessary rewrites of working exteraless functionality.
+- **Build a distinct identity.** Introduce the LibreGram name and the supplied LibreGram logo, then replace inherited launcher-icon choices with a clearly maintained LibreGram collection.
+- **Add useful features.** Prioritize a Status Center with configurable activity profiles, notification rules, schedules, and integration with the existing Ghost Mode implementation.
+- **Verify before release.** Build and test changes before publishing APKs. No build is considered verified until CI or a local build succeeds.
 
----
+## Planned first-party work
 
-## Что это
+See the [roadmap](docs/ROADMAP.md) for the current plan.
 
-exteraless — форк [NagramX](https://github.com/risin42/NagramX), в котором возможности
-exteraGram реализованы с открытым исходным кодом.
+The initial feature direction is:
 
-Отдельный упор — **безопасность плагинов**. В exteraGram плагин не ограничен ни в чём;
-здесь у него есть модель разрешений: плагин объявляет, что ему нужно, это
-видно на экране установки, и получает он только заявленное.
+1. **Status Center:** Online, Idle, Do Not Disturb, and Invisible profiles.
+2. **Notification rules:** allowlists for selected contacts, groups, and channels, plus schedules and temporary modes.
+3. **Ghost Mode integration:** Invisible should control the existing upstream Ghost Mode rather than introduce a competing implementation.
+4. **Launcher icon collection:** keep the icon-picker experience, but curate LibreGram icons and use the supplied LibreGram logo as the primary identity.
 
-Проект **в бете**: часть возможностей exteraGram ещё не перенесена. Если заметили, что
-каких-то функций не хватает, — откройте issue или напишите в [канал](https://t.me/exteraless?direct).
+These are development goals, not claims that the features are already implemented.
 
-* Имя пакета: `com.exteraless.app`
-* Что перенесено: экраны настроек, оформление и параметры чатов, иконпаки, полоса
-  пилюль (Pill Stack), боковое меню, движок Python-плагинов
+## Building
 
-### Ссылки
+Start with the [build guide](docs/BUILDING.md). It documents the current inherited build requirements and configuration.
 
-* Канал: [@exteraless](https://t.me/exteraless)
-* Исходники: [github.com/exteraless/exteraless](https://github.com/exteraless/exteraless)
+The current upstream baseline still contains its original Android application ID and some internal exteraless identifiers. Do not assume the app has already been rebranded just because the repository is named LibreGram Android. The package-ID and app-identity migration will be handled as a separate, audited change.
 
-### Сборка
+## Keeping up with upstream
 
-1. Склонировать репозиторий вместе с подмодулями:
+This repository is a GitHub fork of [exteraless/exteraless](https://github.com/exteraless/exteraless). The recommended workflow for syncing changes is documented in [UPSTREAM.md](docs/UPSTREAM.md).
 
-    ```bash
-    git clone --recursive --shallow-submodules https://github.com/exteraless/exteraless.git exteraless
-    ```
+## Project documentation
 
-    Если репозиторий уже склонирован без подмодулей:
+- [Roadmap](docs/ROADMAP.md)
+- [Project status and decisions](docs/PROJECT_STATUS.md)
+- [Building from source](docs/BUILDING.md)
+- [Upstream sync workflow](docs/UPSTREAM.md)
 
-    ```bash
-    git submodule update --init --recursive --depth=1
-    ```
+## Origin, credits, and license
 
-2. Получить `TELEGRAM_APP_ID` и `TELEGRAM_APP_HASH` на [my.telegram.org](https://my.telegram.org/auth)
-   и создать `local.properties` в корне проекта:
+LibreGram Android is based on [exteraless](https://github.com/exteraless/exteraless), which in turn builds on work from [NagramX](https://github.com/risin42/NagramX) and other projects. Please consult the source files and original project documentation for the complete attribution chain.
 
-   ```properties
-   TELEGRAM_APP_ID=<ваш_app_id>
-   TELEGRAM_APP_HASH=<ваш_app_hash>
-   ```
+The upstream project is distributed under the **GNU General Public License v3.0**. The original [LICENSE](LICENSE) file is retained. Copyright notices, third-party licenses, and design credits must remain with the code and assets they cover.
 
-3. Для подписи APK положить свой `TMessagesProj/release.keystore` и дописать в `local.properties`:
-
-   ```properties
-   KEYSTORE_PASS=<пароль_хранилища>
-   ALIAS_NAME=<имя_ключа>
-   ALIAS_PASS=<пароль_ключа>
-   ```
-
-   Ключа в репозитории нет намеренно. Без него сборка не падает — APK подписывается
-   отладочным ключом Android.
-
-4. Для push-уведомлений положить свой `TMessagesProj/google-services.json`
-   (Firebase, имя пакета `com.exteraless.app`).
-
-5. Заменить метаданные проекта:
-
-    - ключ Google Maps в записи `com.google.android.maps.v2.API_KEY` в `TMessagesProj/src/main/AndroidManifest.xml`;
-    - `BaseRemoteHelper.CHANNEL_METADATA_ID` — числовой id вашего канала метаданных, без префикса `-100`.
-
-6. Собрать: `./gradlew :TMessagesProj:assembleDebug` или открыть проект в Android Studio.
-
-**Про ABI.** Собираются только 64-битные `arm64-v8a` и `x86_64`: Chaquopy собирает
-Python 3.12 лишь под них, и на `armeabi-v7a` конфигурация обрывается. Переменная
-`NATIVE_TARGET` задаёт цель: `arm64-v8a` (один ABI, быстрее), `universal` (оба),
-`SKIP` (без нативной части — только Java и ресурсы).
-
-### Сборка через GitHub Actions
-
-Нужны два секрета репозитория:
-
-* `LOCAL_PROPERTIES` — содержимое `local.properties` в base64:
-
-  ```bash
-  base64 -w0 local.properties
-  ```
-
-* `RELEASE_KEYSTORE` — файл ключа в base64:
-
-  ```bash
-  base64 -w0 TMessagesProj/release.keystore
-  ```
-
-Дальше запустить workflow **Release Build**. Готовый APK лежит в артефактах прогона.
-
-### Авторы дизайна
-
-Иконки и оформление, унаследованные от exteraGram, созданы его дизайнером —
-[@the8055u](https://t.me/the8055u) и студией [@BlueprintDsgn](https://t.me/BlueprintDsgn).
-Права на эти материалы принадлежат авторам.
-
-### Благодарности
-
-- [AyuGram](https://github.com/AyuGram/AyuGram4A)
-- [Cherrygram](https://github.com/arsLan4k1390/Cherrygram)
-- [Dr4iv3rNope](https://github.com/Dr4iv3rNope/NotSoAndroidAyuGram)
-- [exteraGram](https://github.com/exteraSquad/exteraGram)
-- [Inugram](https://github.com/teidesu/inugram)
-- [Nagram](https://github.com/NextAlone/Nagram)
-- [NagramX](https://github.com/risin42/NagramX)
-- [Nekogram](https://github.com/Nekogram/Nekogram)
-- [OctoGram](https://github.com/OctoGramApp/OctoGram)
+LibreGram Android is an independent community project. It is not an official Telegram app and is not affiliated with Telegram, exteraless, or exteraGram.
 
 ---
 
-## English
+## English summary
 
-### What this is
+LibreGram Android is an independent community fork built on [exteraless](https://github.com/exteraless/exteraless). The goal is to maintain a clean upstream relationship while adding a distinct LibreGram identity and carefully selected features such as a configurable Status Center, notification profiles, Ghost Mode integration, and a curated launcher-icon collection.
 
-exteraless is a fork of [NagramX](https://github.com/risin42/NagramX) that implements
-exteraGram's features open-source.
-
-The special focus is **plugin security**. In exteraGram a plugin is not restricted in
-any way; here it comes with a permission model and isolation: a plugin declares what it
-needs, you see that on the install sheet, and it gets only what was declared.
-
-The project is **in beta**: some exteraGram features have not been ported yet. If you
-notice a missing feature, open an issue or write to the [channel](https://t.me/exteraless?direct).
-
-* Package name: `com.exteraless.app`
-
-### Design credits
-
-Icons and visual design inherited from exteraGram are the work of its designer,
-[@the8055u](https://t.me/the8055u), and the [@BlueprintDsgn](https://t.me/BlueprintDsgn)
-studio. Rights to those materials belong to their authors.
-
-### Building
-
-1. Clone with submodules:
-
-    ```bash
-    git clone --recursive --shallow-submodules https://github.com/exteraless/exteraless.git exteraless
-    ```
-
-2. Get `TELEGRAM_APP_ID` and `TELEGRAM_APP_HASH` from [my.telegram.org](https://my.telegram.org/auth)
-   and put them into `local.properties` in the project root.
-
-3. For release signing, drop your own `TMessagesProj/release.keystore` and add
-   `KEYSTORE_PASS`, `ALIAS_NAME`, `ALIAS_PASS` to `local.properties`. No keystore is
-   shipped with the repository; without one the build is signed with the Android debug key.
-
-4. For push notifications, replace `TMessagesProj/google-services.json` with your own
-   Firebase config for `com.exteraless.app`.
-
-5. Build with `./gradlew :TMessagesProj:assembleDebug` or from Android Studio.
-
-Only 64-bit ABIs are built (`arm64-v8a`, `x86_64`): Chaquopy ships Python 3.12 for those
-only, and `armeabi-v7a` fails at configuration time. `NATIVE_TARGET` selects the target:
-`arm64-v8a`, `universal` (both) or `SKIP` (no native part).
-
-For CI, set two repository secrets — `LOCAL_PROPERTIES` and `RELEASE_KEYSTORE`, both
-base64-encoded — and run the **Release Build** workflow. The APK ends up in the run
-artifacts.
+The project is in early development. App branding, package identifiers, signing, and release infrastructure are being audited before the first LibreGram-branded APK is published. The original GPL-3.0 license and upstream attributions are retained.
