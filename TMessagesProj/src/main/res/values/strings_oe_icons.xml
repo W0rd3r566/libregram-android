@@ -36,7 +36,7 @@
     <string name="IconPackEditIconsHint">Open any screen and tap the floating button to replace the icons you see.</string>
     <string name="IconPickerFinish">Finish</string>
     <string name="IconPickerReplaceIcon">Replace Icon</string>
-    <string name="IconPickerOriginal">Original</string>
+    <string name="IconPickerOriginal">Lime</string>
     <string name="IconPickerCurrent">Current</string>
     <string name="IconPickerSelectImage">Select Image</string>
     <string name="IconPickerClipboardEmpty">There\'s no image in the clipboard.</string>
