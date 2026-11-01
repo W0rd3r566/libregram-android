@@ -113,13 +113,11 @@
         android:restoreAnyVersion="true"
         android:backupAgent=".BackupAgent"
         android:hardwareAccelerated="true"
-        android:icon="@mipmap/ic_launcher_exteraless"
         android:label="@string/NagramX"
         android:largeHeap="true"
         android:theme="@style/Theme.TMessages.Start"
         android:manageSpaceActivity="org.telegram.ui.ExternalActionActivity"
         android:networkSecurityConfig="@xml/network_security_config"
-        android:roundIcon="@mipmap/ic_launcher_exteraless_round"
         android:supportsRtl="false"
         android:requestLegacyExternalStorage="true"
         android:hasFragileUserData="true"
@@ -127,8 +125,7 @@
         android:allowAudioPlaybackCapture="true"
         tools:replace="android:supportsRtl"
         android:usesCleartextTraffic="true"
-        android:enableOnBackInvokedCallback="true"
-    >
+        android:enableOnBackInvokedCallback="true" android:icon="@drawable/libregram_icon_original" android:roundIcon="@drawable/libregram_icon_original">
         <!-- usesCleartextTraffic for browser supporting opening http:// links -->
 
         <!-- Единственный включённый alias: именно он даёт запись в лаунчере.
