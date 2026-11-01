@@ -13,7 +13,7 @@ on:
       publish:
         description: 'Post the APK to the Telegram channel'
         type: boolean
-        default: true
+        default: false
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -103,7 +103,7 @@ jobs:
           path: |
             TMessagesProj/build/outputs/apk/release/*.apk
       - name: Publish GitHub pre-release
-        if: ${{ github.ref == 'refs/heads/main' && (github.event_name != 'workflow_dispatch' || inputs.publish) && !contains(github.event.head_commit.message, '[skip publish]') }}
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.publish }}
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -122,7 +122,7 @@ jobs:
               gh release delete "$old" --yes --cleanup-tag
             done
       - name: Send APK to Telegram
-        if: ${{ (github.event_name != 'workflow_dispatch' || inputs.publish) && !contains(github.event.head_commit.message, '[skip publish]') }}
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.publish }}
         env:
           TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
           TG_API_ID: ${{ secrets.TG_API_ID }}
