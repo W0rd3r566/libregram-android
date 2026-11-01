@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-labelledby="title">
+  <title id="title">LibreGram</title>
+  <rect width="1024" height="1024" fill="#0B0D12"/>
+  <path fill="#fff" d="M396 160c-36 0-64 29-64 65v119c0 23 25 36 44 23l69-47c10-7 15-17 15-29v-66c0-36-28-65-64-65z"/>
+  <path d="M512 340 280 492l232 152" fill="none" stroke="#078FF4" stroke-width="76" stroke-linecap="round" stroke-linejoin="round"/>
+  <path fill="#fff" d="M354 624c-13 0-23 10-23 23v153c0 37 30 67 67 67h322c37 0 67-30 67-67s-30-67-67-67H485c-15 0-27-12-27-27v-7c0-9-5-17-12-22l-79-52c-4-3-9-4-13-4z"/>
+</svg>
