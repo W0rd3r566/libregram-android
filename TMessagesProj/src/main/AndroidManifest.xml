@@ -136,7 +136,7 @@
             android:name="org.telegram.messenger.ExteralessIcon"
             android:targetActivity="org.telegram.ui.LaunchActivity"
             android:roundIcon="@mipmap/ic_launcher_exteraless_round"
-            android:exported="true" android:icon="@drawable/libregram_icon_original" android:label="Original">
+            android:exported="true" android:icon="@drawable/libregram_icon_original" android:label="LibreGram">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
