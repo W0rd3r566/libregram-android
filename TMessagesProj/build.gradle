@@ -179,7 +179,7 @@ android {
         def appId = (properties?.getProperty('TELEGRAM_APP_ID') ?: System.getenv('TELEGRAM_APP_ID'))?.trim()
         def appHash = (properties?.getProperty('TELEGRAM_APP_HASH') ?: System.getenv('TELEGRAM_APP_HASH'))?.trim()
 
-        if (!(appId ==~ /\\d+/)) {
+        if (!(appId ==~ /[0-9]+/)) {
             throw new GradleException("TELEGRAM_APP_ID is missing or invalid. Add your own Telegram API ID to local.properties or LOCAL_PROPERTIES.")
         }
         if (!(appHash ==~ /(?i)[0-9a-f]{32}/)) {
