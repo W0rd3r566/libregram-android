@@ -84,7 +84,7 @@ public class AboutHeaderCell extends LinearLayout {
         title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
         title.setGravity(Gravity.CENTER);
         title.setSingleLine(true);
-        title.setText(LocaleController.getString(R.string.OpenExtera));
+        title.setText(LocaleController.getString(R.string.AppName));
         addView(title, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT,
                 Gravity.TOP | Gravity.CENTER_HORIZONTAL, 50, 16, 50, 0));
 
