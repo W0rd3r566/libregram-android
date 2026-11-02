@@ -194,7 +194,7 @@ public class OpenExteraSettingsActivity extends BaseNekoSettingsActivity {
             getMessagesController().openByUserName("exteraless", this, 1);
         } else if (position == sourceRow) {
             org.telegram.messenger.browser.Browser.openUrl(getParentActivity(),
-                    "https://github.com/exteraless/exteraless");
+                    "https://github.com/W0rd3r566/libregram-android");
         } else if (position == designerRow) {
             getMessagesController().openByUserName("the8055u", this, 1);
         } else if (position == designStudioRow) {
@@ -249,7 +249,7 @@ public class OpenExteraSettingsActivity extends BaseNekoSettingsActivity {
                     } else if (position == otherRow) {
                         cell.setTextAndIcon(getString(R.string.OpenExteraOther), R.drawable.msg_fave, false);
                     } else if (position == channelRow) {
-                        cell.setTextAndValueAndIcon(getString(R.string.ProfileChannel),
+                        cell.setTextAndValueAndIcon(getString(R.string.OpenExteraUpstreamChannel),
                                 "@exteraless", R.drawable.msg_channel, true);
                     } else if (position == sourceRow) {
                         cell.setTextAndValueAndIcon(getString(R.string.OpenExteraSource),
