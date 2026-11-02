@@ -61,7 +61,6 @@ The Google Maps key is also package/certificate restricted. The inherited key ma
 
 Depending on which integrations are being tested, the baseline may also require:
 
-- A Firebase `google-services.json` at `TMessagesProj/google-services.json`, configured for the current application ID.
 - A valid Google Maps API key in the `com.google.android.maps.v2.API_KEY` manifest metadata.
 - A numeric `BaseRemoteHelper.CHANNEL_METADATA_ID` for the metadata channel, without the `-100` prefix.
 
