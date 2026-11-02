@@ -10,13 +10,13 @@
 
 The repository is the home for LibreGram-specific development: app identity, carefully integrated improvements, and features that extend the upstream project without erasing its history or authorship.
 
-> **Development status:** early development. This repository is a source fork, not a finished or officially supported app release. The LibreGram app-name, package-ID, icon, and release-signing migration is not complete yet.
+> **Development status:** work in progress. LibreGram branding and the Android application ID (`com.libregram.app`) are configured on the development branch. Firebase setup, release signing, and device-level verification are still pending. This is not a release-ready app.
 
 ## Project goals
 
 - **Respect upstream.** Preserve the original license, copyright notices, design credits, and third-party acknowledgements.
 - **Keep a maintainable fork.** Track upstream changes and avoid unnecessary rewrites of working exteraless functionality.
-- **Build a distinct identity.** Introduce the LibreGram name and the supplied LibreGram logo, then replace inherited launcher-icon choices with a clearly maintained LibreGram collection.
+- **Build a distinct identity.** Use the LibreGram name and supplied logo with a curated LibreGram launcher-icon collection.
 - **Add useful features.** Prioritize a Status Center with configurable activity profiles, notification rules, schedules, and integration with the existing Ghost Mode implementation.
 - **Verify before release.** Build and test changes before publishing APKs. No build is considered verified until CI or a local build succeeds.
 
@@ -37,7 +37,7 @@ These are development goals, not claims that the features are already implemente
 
 Start with the [build guide](docs/BUILDING.md). It documents the current inherited build requirements and configuration.
 
-The current upstream baseline still contains its original Android application ID and some internal exteraless identifiers. Do not assume the app has already been rebranded just because the repository is named LibreGram Android. The package-ID and app-identity migration will be handled as a separate, audited change.
+The Android application ID is `com.libregram.app`. Some internal Java package names and upstream identifiers are intentionally retained to keep the fork maintainable; they are not the installable app ID. Firebase configuration must match `com.libregram.app` before building.
 
 ## Keeping up with upstream
 
