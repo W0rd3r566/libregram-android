@@ -1,6 +1,6 @@
 # Building LibreGram Android
 
-This guide describes the current inherited exteraless build setup. The application identity is still being migrated, so configuration values below describe the current baseline, not the final LibreGram release configuration.
+This guide describes the LibreGram Android build. The source still contains upstream components and identifiers, but the Android application ID is set to the LibreGram namespace.
 
 ## Requirements
 
@@ -43,17 +43,19 @@ TELEGRAM_APP_HASH=your_app_hash
 
 Keep this file private. Do not commit credentials, signing passwords, API keys, or keystores.
 
-## Current application ID
+## Application ID and Firebase
 
-The inherited baseline currently uses:
+The Android application ID is:
 
 ```properties
-APP_PACKAGE=com.exteraless.app
+APP_PACKAGE=com.libregram.app
 ```
 
-The final LibreGram application ID has not yet been selected and migrated. Do not create a Firebase configuration or release keystore on the assumption that the application ID has already changed.
+The Firebase configuration at `TMessagesProj/google-services.json` must contain an Android client whose package name is exactly `com.libregram.app`. The inherited upstream file still targets `com.exteraless.app` and must be replaced before building.
 
-When the migration is completed, this guide will be updated with the final package ID and corresponding Firebase setup.
+Register the LibreGram Android app in the Firebase project used for this fork, download its `google-services.json`, and replace the file at `TMessagesProj/google-services.json`. Do not simply edit the old JSON package-name field: Firebase must generate the matching client configuration.
+
+The Google Maps key is also package/certificate restricted. The inherited key may not work for LibreGram until a matching key is configured.
 
 ## Optional integrations inherited from upstream
 
@@ -101,10 +103,10 @@ Never commit the keystore or passwords. Back up the release key securely: changi
 
 ## GitHub Actions
 
-The inherited release workflow expects repository secrets for its configured build and signing steps. The current baseline documentation uses:
+The GitHub Actions build reads the Telegram API credentials from the repository secret below. The value is the Base64-encoded contents of a private `local.properties` file. It also supports the optional release-signing secret:
 
-- `LOCAL_PROPERTIES`: the contents of `local.properties`, base64-encoded.
-- `RELEASE_KEYSTORE`: the release keystore, base64-encoded.
+- `LOCAL_PROPERTIES`: Base64-encoded `local.properties` containing `TELEGRAM_APP_ID` and `TELEGRAM_APP_HASH` (required).
+- `RELEASE_KEYSTORE`: the release keystore, base64-encoded (optional for a debug build).
 
 On Linux, create the values with:
 
