@@ -59,6 +59,27 @@ pwd = pwd ?: System.getenv('ALIAS_PASS')
 
 def nativeTarget = System.getenv('NATIVE_TARGET') ?: ''
 
+def expectedApplicationId = APP_PACKAGE.toString()
+def firebaseConfigFile = file('google-services.json')
+if (!firebaseConfigFile.isFile()) {
+    throw new GradleException("Missing TMessagesProj/google-services.json for ${expectedApplicationId}. Register the Android app in Firebase and add its google-services.json.")
+}
+def firebaseConfig
+try {
+    firebaseConfig = new groovy.json.JsonSlurper().parse(firebaseConfigFile)
+} catch (Exception exception) {
+    throw new GradleException("TMessagesProj/google-services.json is not valid JSON.", exception)
+}
+def firebasePackages = (firebaseConfig.client ?: [])
+        .collect { it.client_info?.android_client_info?.package_name }
+        .findAll { it != null }
+if (!firebasePackages.contains(expectedApplicationId)) {
+    throw new GradleException(
+            "Firebase package mismatch. Expected ${expectedApplicationId}, found: ${firebasePackages.join(', ') ?: 'no Android clients'}. " +
+            "Register ${expectedApplicationId} in Firebase and replace TMessagesProj/google-services.json."
+    )
+}
+
 if (nativeTarget == 'SKIP') {
     tasks.configureEach { task ->
         if (
@@ -153,28 +174,22 @@ android {
             }
         }
 
-        // obtain your own keys at https://core.telegram.org/api/obtaining_api_id
-        def appId = '6'
-        def appHash = 'eb06d4abfb49dc3eeb1aeb98ae0f581e'
+        // Telegram API credentials must be supplied privately through local.properties
+        // or the LOCAL_PROPERTIES GitHub Actions secret. Never fall back to upstream credentials.
+        def appId = (properties?.getProperty('TELEGRAM_APP_ID') ?: System.getenv('TELEGRAM_APP_ID'))?.trim()
+        def appHash = (properties?.getProperty('TELEGRAM_APP_HASH') ?: System.getenv('TELEGRAM_APP_HASH'))?.trim()
 
-        // obtain your own key at https://developers.google.com/maps/documentation/android-sdk/get-api-key
-        // Android keys are restricted by package name and signing certificate,
-        // so a key taken from another build shows an empty map.
-        def mapsKey = 'AIzaSyDE_x6GRKJCSfCY33soBYUQ2piYsgjVpVE'
-
-        // Nothing Glyph SDK. «test» — отладочный ключ из Glyph Developer Kit, боевой
-        // запрашивается у Nothing под package name приложения.
-        def glyphKey = 'test'
-
-        if (properties != null) {
-            appId = properties.getProperty('TELEGRAM_APP_ID') ?: System.getenv('TELEGRAM_APP_ID') ?: appId
-            appHash = properties.getProperty('TELEGRAM_APP_HASH') ?: System.getenv('TELEGRAM_APP_HASH') ?: appHash
-            mapsKey = properties.getProperty('MAPS_API_KEY') ?: System.getenv('MAPS_API_KEY') ?: mapsKey
-            glyphKey = properties.getProperty('GLYPH_API_KEY') ?: System.getenv('GLYPH_API_KEY') ?: glyphKey
-        } else {
-            mapsKey = System.getenv('MAPS_API_KEY') ?: mapsKey
-            glyphKey = System.getenv('GLYPH_API_KEY') ?: glyphKey
+        if (!(appId ==~ /\\d+/)) {
+            throw new GradleException("TELEGRAM_APP_ID is missing or invalid. Add your own Telegram API ID to local.properties or LOCAL_PROPERTIES.")
         }
+        if (!(appHash ==~ /(?i)[0-9a-f]{32}/)) {
+            throw new GradleException("TELEGRAM_APP_HASH is missing or invalid. Add your own 32-character Telegram API hash to local.properties or LOCAL_PROPERTIES.")
+        }
+
+        // Android keys are package/certificate restricted; provide project-specific values when needed.
+        def mapsKey = (properties?.getProperty('MAPS_API_KEY') ?: System.getenv('MAPS_API_KEY')) ?: 'AIzaSyDE_x6GRKJCSfCY33soBYUQ2piYsgjVpVE'
+        // «test» is a development key from the Nothing Glyph SDK.
+        def glyphKey = (properties?.getProperty('GLYPH_API_KEY') ?: System.getenv('GLYPH_API_KEY')) ?: 'test'
 
         manifestPlaceholders += [MAPS_API_KEY: mapsKey, GLYPH_API_KEY: glyphKey]
 
@@ -278,7 +293,7 @@ android {
 androidComponents {
     onVariants(selector().all()) { variant ->
         variant.outputs.forEach { output ->
-            String gramName = 'exteraless'
+            String gramName = 'libregram'
             String first = String.format('%s-v%s(%s)', gramName, verName, verCode)
             output.outputFileName.set(
                 output.outputFileName.get()
