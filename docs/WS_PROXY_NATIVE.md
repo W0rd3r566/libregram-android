@@ -1,20 +1,9 @@
-# Native integration checkpoint
+# Native build
 
-The upstream source revision is pinned to `53f392280a370199ffe5c6ef0ac88808ed17c575`.
-`Tools/build-ws-proxy.sh` cross-compiles the JNI crate from source with Cargo.lock,
-checks the exported start symbol and copies the upstream MIT license into APK assets.
-It currently supports Linux CI and the client arm64-v8a / x86_64 ABI set.
+Upstream: valnesfjord/tg-ws-proxy-rs, MIT, revision `53f392280a370199ffe5c6ef0ac88808ed17c575`.
 
-The Java adapter retains upstream JNI package names intentionally; renaming these
-without changing native symbols and the cached callback class breaks the JNI ABI.
-It uses AndroidX Keep annotations, defers library loading and dispatches callbacks
-to the main thread. Raw logs are discarded until redaction is implemented.
+The feature workflow runs `bash Tools/build-ws-proxy.sh` with Rust 1.98.0 and Android NDK 27.2.12479018. The script cross-compiles the locked JNI crate, checks the exported JNI start symbol and copies the MIT license into APK assets. ABI support: arm64-v8a and x86_64; CI currently builds arm64-v8a only.
 
-This checkpoint is not a completed proxy integration. The script has NOT been run
-in an Android build environment yet and is NOT wired into the APK workflow yet.
-A service, connection ownership/restoration, actual settings controls and tests are
-still required. The visible settings screen remains a preview.
+Java callback names and the io.github.valnesfjord.tgwsproxyrs package are an upstream ABI contract, not LibreGram application branding. AndroidX Keep annotations preserve the adapter under shrinking. Loading is deferred so application startup does not fail merely because a native payload is absent.
 
-CI wiring must install a Rust toolchain compatible with upstream rust-toolchain.toml
-and run `bash Tools/build-ws-proxy.sh` before Gradle assembles the application.
-Local build scratch files are placed under `.ws-proxy-build/` and must not be committed.
+No successful build is yet verified. Upstream toolchain/NDK compatibility and packaged symbol behavior require CI and device tests. Scratch output is under .ws-proxy-build and must not be committed.
