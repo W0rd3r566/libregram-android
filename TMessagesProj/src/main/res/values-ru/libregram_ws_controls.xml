@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="LibreGramWsEnable">Использовать WS-прокси</string>
+<string name="LibreGramWsConnect">Подключать все аккаунты LibreGram</string>
+<string name="LibreGramWsTcp">Разрешить прямой TCP при сбое WS</string>
+<string name="LibreGramWsAdvanced">Расширенные настройки</string>
+<string name="LibreGramWsPort">Локальный порт</string>
+<string name="LibreGramWsPool">Готовые соединения на DC</string>
+<string name="LibreGramWsCf">Домен Cloudflare-прокси</string>
+<string name="LibreGramWsWorker">Домен Cloudflare Worker</string>
+<string name="LibreGramWsDiagnostics">Диагностика</string>
+<string name="LibreGramWsCheck">Проверить соединение с Telegram</string>
+<string name="LibreGramWsJournal">Журнал событий</string>
+<string name="LibreGramWsStarting">Запускается</string>
+<string name="LibreGramWsRunning">Локальный прокси запущен</string>
+<string name="LibreGramWsStopping">Останавливается</string>
+<string name="LibreGramWsError">Ошибка — см. журнал</string>
+<string name="LibreGramWsOff">Выключен</string>
+<string name="LibreGramWsInfo">Экспериментальная debug-интеграция. Запуск локального прокси не означает доступность Telegram — выполните проверку. Сохранённые настройки прокси не перезаписываются. Звонки могут использовать другое подключение.</string>
+<string name="LibreGramWsAdvancedInfo">Перед изменением остановите прокси. Адрес: только 127.0.0.1. Проверка TLS всегда включена. Сторонние домены необязательны и задаются вами. Сырые логи транспорта отключены.</string>
+<string name="LibreGramWsStopToEdit">Остановите прокси перед изменением настроек.</string>
+<string name="LibreGramWsInvalid">Неверное значение. Проверьте порт, диапазон или имя домена.</string>
+<string name="LibreGramWsTcpWarning">Разрешить прямое TCP-подключение к Telegram, если WebSocket недоступен? Сеть сможет видеть IP-адреса Telegram. Проверка TLS для WebSocket остаётся включённой.</string>
+<string name="LibreGramWsDebugOnly">Сервис пока доступен только в debug-сборках. Release-интеграция не проверена.</string>
+</resources>

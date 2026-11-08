@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="LibreGramWsEnable">Use WS proxy</string>
+<string name="LibreGramWsConnect">Connect all LibreGram accounts</string>
+<string name="LibreGramWsTcp">Allow direct TCP fallback</string>
+<string name="LibreGramWsAdvanced">Advanced settings</string>
+<string name="LibreGramWsPort">Local port</string>
+<string name="LibreGramWsPool">Warm connections per DC</string>
+<string name="LibreGramWsCf">Cloudflare proxy domain</string>
+<string name="LibreGramWsWorker">Cloudflare Worker domain</string>
+<string name="LibreGramWsDiagnostics">Diagnostics</string>
+<string name="LibreGramWsCheck">Check Telegram connection</string>
+<string name="LibreGramWsJournal">Event journal</string>
+<string name="LibreGramWsStarting">Starting</string>
+<string name="LibreGramWsRunning">Listener ready</string>
+<string name="LibreGramWsStopping">Stopping</string>
+<string name="LibreGramWsError">Error — see event journal</string>
+<string name="LibreGramWsOff">Off</string>
+<string name="LibreGramWsInfo">Experimental debug integration. The local listener and Telegram reachability are separate states. Your saved proxy configuration is not overwritten. Calls may use another connection.</string>
+<string name="LibreGramWsAdvancedInfo">Stop the proxy before editing. Listener: 127.0.0.1 only. TLS verification is always enabled. Third-party domains are optional and provided by you. Raw native logs are disabled.</string>
+<string name="LibreGramWsStopToEdit">Stop the proxy before changing settings.</string>
+<string name="LibreGramWsInvalid">Invalid value. Check the port, range or domain name.</string>
+<string name="LibreGramWsTcpWarning">If WebSocket routes fail, allow a direct TCP connection to Telegram? This can expose Telegram destination IPs to your network. TLS verification remains enabled for WebSocket routes.</string>
+<string name="LibreGramWsDebugOnly">The service is currently available only in debug builds. Release integration is not verified.</string>
+</resources>
