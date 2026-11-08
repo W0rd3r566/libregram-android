@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="OpenExtera">LibreGram</string>
-    <string name="OpenExteraPreferences">Настройки LibreGram</string>
-    <string name="AppIconExteraless">LibreGram Original</string>
+<string name="OpenExtera">LibreGram</string>
+<string name="OpenExteraPreferences">Настройки LibreGram</string>
+<string name="AppIconExteraless">LibreGram Original</string>
+<string name="AppIconBlueprint">Graphite</string>
+<string name="AppIconRed">Ocean</string>
+<string name="AppIconNya">Midnight</string>
+<string name="AppIconAyu">Mint</string>
+<string name="AppIconQuack">Violet</string>
+<string name="AppIconGo">Rose</string>
+<string name="AppIconHand">Ember</string>
+<string name="AppIconMono">Silver</string>
+<string name="AppIconNothing">Cobalt</string>
+<string name="AppIconPlus">Crimson</string>
+<string name="AppIconTelegramOriginal">Lime</string>
+<string name="AppIconVintage">Sand</string>
+<string name="AppIconAqua">Iris</string>
+<string name="AppIconPremium">Ice</string>
+<string name="AppIconTurbo">Mono</string>
+<string name="AppIconNox">Night</string>
 </resources>
