@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="LibreGramWsProxy">WS Proxy</string>
+    <string name="LibreGramChannel">LibreGram channel</string>
+    <string name="LibreGramSource">LibreGram source code</string>
+    <string name="LibreGramWsStatus">Status</string>
+    <string name="LibreGramWsNotIntegrated">Not connected</string>
+    <string name="LibreGramWsPreviewInfo">This settings page is a preview. The Rust engine is not integrated yet; no proxy is started and your current connection is unchanged. Connection controls and diagnostics will become available after native integration.</string>
+    <string name="LibreGramWsEngine">Transport source code</string>
+    <string name="LibreGramWsCredits">Planned transport: tg-ws-proxy-rs by valnesfjord (MIT), based on Flowseal/tg-ws-proxy. Original client and design credits are retained.</string>
+</resources>

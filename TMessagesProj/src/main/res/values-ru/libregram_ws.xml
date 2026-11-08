@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="LibreGramWsProxy">WS-прокси</string>
+    <string name="LibreGramChannel">Канал LibreGram</string>
+    <string name="LibreGramSource">Исходный код LibreGram</string>
+    <string name="LibreGramWsStatus">Состояние</string>
+    <string name="LibreGramWsNotIntegrated">Не подключён</string>
+    <string name="LibreGramWsPreviewInfo">Это предварительная версия раздела. Rust-ядро ещё не встроено: прокси не запускается, текущее подключение не изменяется. Управление подключением и диагностика появятся после интеграции ядра.</string>
+    <string name="LibreGramWsEngine">Исходный код транспорта</string>
+    <string name="LibreGramWsCredits">Планируемый транспорт: tg-ws-proxy-rs от valnesfjord (MIT), на базе Flowseal/tg-ws-proxy. Авторство исходного клиента и дизайна сохранено.</string>
+</resources>

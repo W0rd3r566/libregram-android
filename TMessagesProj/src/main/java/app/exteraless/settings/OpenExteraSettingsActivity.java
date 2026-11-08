@@ -6,7 +6,6 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 
-
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.telegram.messenger.R;
@@ -19,7 +18,7 @@ import tw.nekomimi.nekogram.settings.BaseNekoSettingsActivity;
 import tw.nekomimi.nekogram.ui.cells.HeaderCell;
 
 /**
- * Корневой экран раздела exteraless.
+ * Корневой экран раздела LibreGram.
  * Структура повторяет настройки exteraGram: About-шапка + категории с иконками.
  * Открывается из главных настроек (SettingsActivity, id 102).
  */
@@ -27,24 +26,20 @@ public class OpenExteraSettingsActivity extends BaseNekoSettingsActivity {
 
     private static final int MENU_CLOUD = 1;
     private static final int MENU_SEARCH = 2;
-
     private static final int TYPE_ABOUT = 100;
-
     private int aboutRow;
-
     private int categoriesHeaderRow;
     private int generalRow;
     private int appearanceRow;
     private int chatsRow;
     private int pluginsRow;
+    private int wsProxyRow;
     private int otherRow;
     private int categoriesDividerRow;
-
     private int linksHeaderRow;
     private int channelRow;
     private int sourceRow;
     private int linksDividerRow;
-
     private int designHeaderRow;
     private int designerRow;
     private int designStudioRow;
@@ -53,22 +48,19 @@ public class OpenExteraSettingsActivity extends BaseNekoSettingsActivity {
     @Override
     protected void updateRows() {
         super.updateRows();
-
         aboutRow = addRow("about");
-
         categoriesHeaderRow = addRow("categoriesHeader");
         generalRow = addRow("general");
         appearanceRow = addRow("appearance");
         chatsRow = addRow("chats");
         pluginsRow = addRow("plugins");
+        wsProxyRow = addRow("libregramWsProxy");
         otherRow = addRow("other");
         categoriesDividerRow = addRow();
-
         linksHeaderRow = addRow("linksHeader");
         channelRow = addRow("channel");
         sourceRow = addRow("source");
         linksDividerRow = addRow();
-
         designHeaderRow = addRow("designHeader");
         designerRow = addRow("designer");
         designStudioRow = addRow("designStudio");
@@ -119,16 +111,10 @@ public class OpenExteraSettingsActivity extends BaseNekoSettingsActivity {
     }
 
     /**
-     * Базовый класс в onInsets обнуляет верхний отступ списка. Нам он нужен: actionBar
-     * прозрачный и не занимает места, поэтому без отступа контент уезжает под строку
-     * состояния и логотип срезает.
-     */
-    /**
      * У экстеры на корневом экране адаптивный фон НЕ включается вовсе:
      * {@code BasePreferencesActivity.createView} вызывает {@code setAdaptiveBackground}
      * только при {@code !hasHeaderCell()}, а у {@code MainPreferencesActivity}
-     * {@code hasHeaderCell()} возвращает true. Шапка остаётся прозрачной всегда,
-     * заголовок не проявляется даже при прокрутке.
+     * {@code hasHeaderCell()} возвращает true. Шапка остаётся прозрачной всегда.
      */
     @Override
     protected void setupAdaptiveBackground() {
@@ -188,10 +174,12 @@ public class OpenExteraSettingsActivity extends BaseNekoSettingsActivity {
             presentFragment(new OpenExteraChatsActivity());
         } else if (position == pluginsRow) {
             presentFragment(new app.exteraless.plugins.ui.PluginsActivity());
+        } else if (position == wsProxyRow) {
+            presentFragment(new LibreGramWsProxySettingsActivity());
         } else if (position == otherRow) {
             presentFragment(new OpenExteraOtherActivity());
         } else if (position == channelRow) {
-            getMessagesController().openByUserName("exteraless", this, 1);
+            getMessagesController().openByUserName("libregramm", this, 1);
         } else if (position == sourceRow) {
             org.telegram.messenger.browser.Browser.openUrl(getParentActivity(),
                     "https://github.com/W0rd3r566/libregram-android");
@@ -203,7 +191,6 @@ public class OpenExteraSettingsActivity extends BaseNekoSettingsActivity {
     }
 
     private class ListAdapter extends BaseListAdapter {
-
         public ListAdapter(Context context) {
             super(context);
         }
@@ -246,13 +233,15 @@ public class OpenExteraSettingsActivity extends BaseNekoSettingsActivity {
                         cell.setTextAndIcon(getString(R.string.OpenExteraChats), R.drawable.msg_discussion, true);
                     } else if (position == pluginsRow) {
                         cell.setTextAndIcon(getString(R.string.OpenExteraPlugins), R.drawable.msg_plugins, true);
+                    } else if (position == wsProxyRow) {
+                        cell.setTextAndIcon(getString(R.string.LibreGramWsProxy), R.drawable.msg_language, true);
                     } else if (position == otherRow) {
                         cell.setTextAndIcon(getString(R.string.OpenExteraOther), R.drawable.msg_fave, false);
                     } else if (position == channelRow) {
-                        cell.setTextAndValueAndIcon(getString(R.string.OpenExteraUpstreamChannel),
-                                "@exteraless", R.drawable.msg_channel, true);
+                        cell.setTextAndValueAndIcon(getString(R.string.LibreGramChannel),
+                                "@libregramm", R.drawable.msg_channel, true);
                     } else if (position == sourceRow) {
-                        cell.setTextAndValueAndIcon(getString(R.string.OpenExteraSource),
+                        cell.setTextAndValueAndIcon(getString(R.string.LibreGramSource),
                                 "GitHub", R.drawable.msg_language, false);
                     } else if (position == designerRow) {
                         cell.setTextAndValueAndIcon(getString(R.string.OpenExteraDesigner),
@@ -261,9 +250,7 @@ public class OpenExteraSettingsActivity extends BaseNekoSettingsActivity {
                         cell.setTextAndValueAndIcon(getString(R.string.OpenExteraDesignStudio),
                                 "@BlueprintDsgn", R.drawable.msg_groups, false);
                     }
-                    // ВАЖНО: только после setTextAndIcon* — они сбрасывают imageLeft в 16dp.
-                    // Метрики сняты с 12.9.0 (420 dpi): иконка 88px от края экрана, текст 219px,
-                    // то есть 21dp и 71dp вместо дефолтных 16dp и 58dp.
+                    // setTextAndIcon* сбрасывает imageLeft в 16dp; восстанавливаем метрики шапки.
                     cell.setImageLeft(21);
                     cell.setOffsetFromImage(71);
                     break;
@@ -293,8 +280,6 @@ public class OpenExteraSettingsActivity extends BaseNekoSettingsActivity {
                     || position == designHeaderRow) {
                 return TYPE_HEADER;
             } else if (position == categoriesDividerRow || position == linksDividerRow) {
-                // Промежуток между секциями — тень фиксированной высоты. TextInfoPrivacyCell
-                // здесь держал высоту под подпись, которой нет, и оставлял пустое поле.
                 return TYPE_SHADOW;
             } else if (position == designDividerRow) {
                 return TYPE_INFO_PRIVACY;
