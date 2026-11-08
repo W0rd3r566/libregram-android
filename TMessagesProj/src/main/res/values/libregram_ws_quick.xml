@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="LibreGramWsQuickEnable">Enable WS proxy</string>
+<string name="LibreGramWsQuickDisable">Disable WS proxy</string>
+</resources>
