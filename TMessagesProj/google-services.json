@@ -1,28 +1,18 @@
 {
   "project_info": {
-    "project_number": "335004274031",
-    "project_id": "exteraless",
-    "storage_bucket": "exteraless.firebasestorage.app"
+    "project_number": "776826224626",
+    "project_id": "libregram-789ee",
+    "storage_bucket": "libregram-789ee.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:335004274031:android:e06325b96c4b17732eac9a",
-        "android_client_info": {
-          "package_name": "com.exteraless.app"
-        }
+        "mobilesdk_app_id": "1:776826224626:android:359947df525b946740b56b",
+        "android_client_info": { "package_name": "com.libregram.app" }
       },
       "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBuCdqzdLtlstYvdiSnVJmVoxusxFKlabc"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
+      "api_key": [ { "current_key": "AIzaSyAcBTpNGH2U1GQvM9bys4v_n-fwOaZfAng" } ],
+      "services": { "appinvite_service": { "other_platform_oauth_client": [] } }
     }
   ],
   "configuration_version": "1"
