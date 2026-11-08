@@ -1,95 +1,50 @@
 #!/usr/bin/env python3
-"""Validate the LibreGram app identity and launcher icon resources."""
-
+"""Validate LibreGram application identity and launcher resources."""
 from __future__ import annotations
-
-import re
 import sys
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-ANDROID = "{http://schemas.android.com/apk/res/android}"
-RES = ROOT / "TMessagesProj" / "src" / "main" / "res"
-MANIFEST = ROOT / "TMessagesProj" / "src" / "main" / "AndroidManifest.xml"
+ANDROID = '{http://schemas.android.com/apk/res/android}'
+RES = ROOT / 'TMessagesProj/src/main/res'
+EXPECTED_LABELS = {'LibreGram', 'Graphite', 'Ocean', 'Midnight', 'Mint', 'Violet', 'Rose', 'Ember', 'Silver', 'Cobalt', 'Crimson', 'Lime', 'Sand', 'Iris', 'Ice', 'Mono', 'Night'}
 
-EXPECTED_LABELS = {
-    "LibreGram", "Graphite", "Ocean", "Midnight", "Mint", "Violet",
-    "Rose", "Ember", "Silver", "Cobalt", "Crimson", "Lime",
-    "Sand", "Iris", "Ice", "Mono", "Night",
-}
-
-
-def require(condition: bool, message: str) -> None:
+def require(condition, message):
     if not condition:
         raise AssertionError(message)
 
-
-def main() -> int:
-    manifest = ET.parse(MANIFEST).getroot()
-    application = manifest.find("application")
-    require(application is not None, "AndroidManifest.xml has no application element")
-
-    require(
-        application.get(ANDROID + "label") == "@string/NagramX",
-        "Application label must resolve through @string/NagramX",
-    )
-    require(
-        application.get(ANDROID + "icon") == "@drawable/libregram_icon_original",
-        "Application icon must use the LibreGram Original vector",
-    )
-
+def main():
+    application = ET.parse(ROOT / 'TMessagesProj/src/main/AndroidManifest.xml').getroot().find('application')
+    require(application is not None, 'Manifest has no application')
+    label = application.get(ANDROID + 'label', '')
+    require(label in {'@string/AppName', '@string/NagramX'}, 'Application label must reference a validated LibreGram string')
+    require(application.get(ANDROID + 'icon') == '@drawable/libregram_icon_original', 'Application must use LibreGram Original icon')
     aliases = []
-    for alias in application.findall("activity-alias"):
-        categories = {
-            item.get(ANDROID + "name")
-            for intent_filter in alias.findall("intent-filter")
-            for item in intent_filter.findall("category")
-        }
-        if "android.intent.category.LAUNCHER" in categories:
+    for alias in application.findall('activity-alias'):
+        categories = {c.get(ANDROID + 'name') for f in alias.findall('intent-filter') for c in f.findall('category')}
+        if 'android.intent.category.LAUNCHER' in categories:
             aliases.append(alias)
-
-    require(bool(aliases), "No launcher activity-alias entries were found")
-
-    checked_icons: set[str] = set()
+    require(aliases, 'No launcher aliases')
+    icons = set()
     for alias in aliases:
-        label = alias.get(ANDROID + "label", "")
-        icon = alias.get(ANDROID + "icon", "")
-        require(label in EXPECTED_LABELS, f"Unexpected launcher icon label: {label!r}")
-        require(
-            icon.startswith("@drawable/libregram_icon_"),
-            f"Launcher alias {label!r} still uses a non-LibreGram icon: {icon!r}",
-        )
-        resource_name = icon.removeprefix("@drawable/")
-        resource_file = RES / "drawable" / f"{resource_name}.xml"
-        require(resource_file.is_file(), f"Missing vector drawable: {resource_file}")
-        ET.parse(resource_file)
-        checked_icons.add(resource_name)
-
-    strings_nax = ET.parse(RES / "values" / "strings_nax.xml").getroot()
-    nagram_x = strings_nax.find("string[@name='NagramX']")
-    require(nagram_x is not None and (nagram_x.text or "").strip() == "LibreGram",
-            "NagramX launcher label must be LibreGram")
-
-    strings = ET.parse(RES / "values" / "strings.xml").getroot()
-    app_name = strings.find("string[@name='AppName']")
-    require(app_name is not None and (app_name.text or "").strip() == "LibreGram",
-            "AppName must be LibreGram")
-
-    settings = (ROOT / "settings.gradle").read_text(encoding="utf-8")
-    require('rootProject.name = "LibreGram"' in settings,
-            "Gradle root project name must be LibreGram")
-
-    print(
-        f"LibreGram branding OK: {len(aliases)} launcher aliases, "
-        f"{len(checked_icons)} distinct vector icons."
-    )
+        name = alias.get(ANDROID + 'label', '')
+        icon = alias.get(ANDROID + 'icon', '')
+        require(name in EXPECTED_LABELS, f'Unexpected launcher label: {name!r}')
+        require(icon.startswith('@drawable/libregram_icon_'), f'Non-LibreGram launcher icon: {icon!r}')
+        resource = icon.removeprefix('@drawable/')
+        ET.parse(RES / 'drawable' / (resource + '.xml'))
+        icons.add(resource)
+    for filename, name in [('strings.xml', 'AppName'), ('strings_nax.xml', 'NagramX')]:
+        node = ET.parse(RES / 'values' / filename).getroot().find(f"string[@name='{name}']")
+        require(node is not None and (node.text or '').strip() == 'LibreGram', f'{name} must be LibreGram')
+    require('rootProject.name = "LibreGram"' in (ROOT / 'settings.gradle').read_text(), 'Gradle project must be LibreGram')
+    print(f'LibreGram branding OK: {len(aliases)} aliases, {len(icons)} icons')
     return 0
 
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     try:
-        raise SystemExit(main())
+        sys.exit(main())
     except (AssertionError, ET.ParseError, OSError) as exc:
-        print(f"Branding validation failed: {exc}", file=sys.stderr)
-        raise SystemExit(1)
+        print(f'Branding validation failed: {exc}', file=sys.stderr)
+        sys.exit(1)
