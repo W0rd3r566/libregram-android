@@ -1,7 +1,5 @@
 name: LibreGram feature APK
 on:
-  push:
-    branches: [feature/libregram-ws-settings]
   workflow_dispatch:
 permissions:
   contents: read
