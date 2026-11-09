@@ -1,9 +1,13 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# tg-ws-proxy-rs by valnesfjord, MIT; preserve upstream JNI names as an ABI contract.
+# tg-ws-proxy-rs by valnesfjord, MIT; JNI names remain an ABI contract.
 REVISION=53f392280a370199ffe5c6ef0ac88808ed17c575
 ROOT=$(cd "$(dirname "$0")/.." && pwd)
+python3 "$ROOT/Tools/refine-ws-errors.py"
+mkdir -p "$ROOT/build/ws-unit"
+javac -d "$ROOT/build/ws-unit" "$ROOT/TMessagesProj/src/main/java/com/libregram/proxy/WsErrorClassifier.java" "$ROOT/tests/java/WsErrorClassifierTest.java"
+java -cp "$ROOT/build/ws-unit" WsErrorClassifierTest
 SOURCE="$ROOT/.ws-proxy-build/source"
 TARGET_DIR="$ROOT/.ws-proxy-build/target"
 NDK="${ANDROID_NDK_HOME:-${ANDROID_HOME:?ANDROID_HOME is required}/ndk/27.2.12479018}"
@@ -43,7 +47,6 @@ OUTPUT="$ROOT/TMessagesProj/jni/$ABI"
 mkdir -p "$OUTPUT"
 cp "$TARGET_DIR/$TARGET/release/libtg_ws_proxy_jni.so" "$OUTPUT/"
 "$TOOLCHAIN/llvm-readelf" --dyn-syms --wide "$OUTPUT/libtg_ws_proxy_jni.so" | grep -F Java_io_github_valnesfjord_tgwsproxyrs_NativeProxy_nativeStart
-# The source license must accompany every packaged native build.
 mkdir -p "$ROOT/TMessagesProj/src/main/assets/licenses"
 cp "$SOURCE/LICENSE" "$ROOT/TMessagesProj/src/main/assets/licenses/tg-ws-proxy-rs-MIT.txt"
 echo "Built pinned tg-ws-proxy-rs $REVISION for $ABI"
