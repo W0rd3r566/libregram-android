@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="LibreGramWsDuration">Session duration</string>
+<string name="LibreGramWsNoTimer">Until stopped / process ends</string>
+<string name="LibreGramWs15Minutes">15 minutes</string>
+<string name="LibreGramWs60Minutes">1 hour</string>
+<string name="LibreGramWsReset">Reset WS proxy settings</string>
+<string name="LibreGramWsResetConfirm">Reset startup, routing, port, pool, timer and custom domains? Accounts, saved user proxies and the local secret will be preserved.</string>
+</resources>

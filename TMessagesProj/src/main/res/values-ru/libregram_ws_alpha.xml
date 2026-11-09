@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="LibreGramWsDuration">Длительность сеанса</string>
+<string name="LibreGramWsNoTimer">До выключения / завершения процесса</string>
+<string name="LibreGramWs15Minutes">15 минут</string>
+<string name="LibreGramWs60Minutes">1 час</string>
+<string name="LibreGramWsReset">Сбросить настройки WS-прокси</string>
+<string name="LibreGramWsResetConfirm">Сбросить автозапуск, маршрутизацию, порт, пул, таймер и свои домены? Аккаунты, обычные прокси и локальный секрет останутся без изменений.</string>
+</resources>
