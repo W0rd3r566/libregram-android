@@ -30,3 +30,16 @@ project(':TMessagesProj_Modules:media3:media-lib-common-ktx').projectDir = file(
 project(':TMessagesProj_Modules:media3:media-lib-effect').projectDir = file("TMessagesProj_Modules/media3/effect")
 project(':TMessagesProj_Modules:media3:media-test-utils').projectDir = file("TMessagesProj_Modules/media3/test-utils")
 project(':TMessagesProj_Modules:media3:media-lib-exoplayer').buildFileName = '../../../media3/exoplayer.gradle'
+
+gradle.beforeProject { p ->
+    if (p.path == ':TMessagesProj') {
+        p.pluginManager.withPlugin('com.android.application') {
+            p.extensions.getByName('androidComponents').finalizeDsl { dsl ->
+                dsl.defaultConfig.versionName = p.property('LIBREGRAM_VERSION_NAME').toString()
+                dsl.defaultConfig.versionCode = p.property('LIBREGRAM_VERSION_CODE').toString().toInteger()
+                dsl.defaultConfig.buildConfigField('String', 'BUILD_VERSION_STRING',
+                        '"' + p.property('LIBREGRAM_VERSION_NAME').toString() + '"')
+            }
+        }
+    }
+}
