@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="LibreGramWsChecking">Проверка…</string>
+<string name="LibreGramWsCheckTimeout">Нет ответа за 15 с</string>
+<string name="LibreGramWsUnavailable">Недоступен</string>
+<string name="LibreGramWsNotification">Локальный WebSocket-транспорт Telegram</string>
+<string name="LibreGramWsStop">Остановить</string>
+</resources>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="LibreGramWsChecking">Checking…</string>
+<string name="LibreGramWsCheckTimeout">Timed out (15 s)</string>
+<string name="LibreGramWsUnavailable">Unavailable</string>
+<string name="LibreGramWsNotification">Local Telegram WebSocket transport</string>
+<string name="LibreGramWsStop">Stop</string>
+</resources>
