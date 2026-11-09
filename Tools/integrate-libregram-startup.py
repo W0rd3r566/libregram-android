@@ -45,4 +45,5 @@ for relative, transform in [
 module['main']()
 for path, result in updates:
     path.write_text(result, encoding='utf-8')
-print('Opt-in WS startup integrated.')
+runpy.run_path(str(ROOT / 'Tools/fix-libregram-branding.py'))['main']()
+print('Opt-in WS startup and branding integrated.')
