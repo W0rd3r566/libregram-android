@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="LibreGramWsAutoStart">Automatically enable WS proxy on app launch</string>
+</resources>
