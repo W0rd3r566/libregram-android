@@ -14,33 +14,19 @@ pluginManagement {
 plugins {
     id 'org.gradle.toolchains.foojay-resolver-convention' version '1.0.0'
 }
-
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
         mavenCentral()
-        // Aliuhook (Xposed-совместимые хуки поверх LSPlant) для движка плагинов
         maven { url "https://maven.aliucord.com/releases" }
     }
 }
-
 rootProject.name = "LibreGram"
 include ':TMessagesProj'
-
 gradle.ext.androidxMediaModulePrefix = 'TMessagesProj_Modules:media3:media-'
 apply from: file("TMessagesProj_Modules/media/core_settings.gradle")
 project(':TMessagesProj_Modules:media3:media-lib-common-ktx').projectDir = file("TMessagesProj_Modules/media3/common-ktx")
 project(':TMessagesProj_Modules:media3:media-lib-effect').projectDir = file("TMessagesProj_Modules/media3/effect")
 project(':TMessagesProj_Modules:media3:media-test-utils').projectDir = file("TMessagesProj_Modules/media3/test-utils")
 project(':TMessagesProj_Modules:media3:media-lib-exoplayer').buildFileName = '../../../media3/exoplayer.gradle'
-
-// Python is already required by the client build (Chaquopy).
-// Source integration validates anchors and fails on unexpected upstream drift.
-def integration = new ProcessBuilder(
-        System.getenv('CHAQUOPY_BUILD_PYTHON') ?: 'python3',
-        file('Tools/integrate-libregram-startup.py').absolutePath)
-        .directory(settingsDir).inheritIO().start()
-if (integration.waitFor() != 0) {
-    throw new GradleException('LibreGram controls integration failed; review upstream anchors.')
-}
