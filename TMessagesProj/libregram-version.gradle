@@ -1,0 +1,4 @@
+// Keep the Telegram protocol/base version separate from the LibreGram product version.
+android.defaultConfig.versionName = LIBREGRAM_VERSION_NAME.toString()
+android.defaultConfig.versionCode = LIBREGRAM_VERSION_CODE.toInteger()
+android.defaultConfig.buildConfigField 'String', 'BUILD_VERSION_STRING', '"' + LIBREGRAM_VERSION_NAME.toString() + '"'
