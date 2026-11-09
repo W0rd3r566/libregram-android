@@ -14,6 +14,7 @@ jobs:
     timeout-minutes: 180
     env:
       NATIVE_TARGET: arm64-v8a
+      COMMIT_ID: ${{ github.sha }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -22,25 +23,17 @@ jobs:
         env:
           INPUT_LOCAL_PROPERTIES: ${{ secrets.LOCAL_PROPERTIES }}
         run: python3 .github/scripts/prepare_private_properties.py
-      - name: Validate Firebase application identity
+      - name: Validate Firebase identity
         env:
           GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
         run: |
           python3 - <<'PY'
-          import json, os, pathlib, sys
-          path = pathlib.Path('TMessagesProj/google-services.json')
-          supplied = os.environ.get('GOOGLE_SERVICES_JSON', '')
-          try:
-              config = json.loads(supplied or path.read_text())
-              packages = [c.get('client_info', {}).get('android_client_info', {}).get('package_name') for c in config.get('client', [])]
-              if 'com.libregram.app' not in packages:
-                  raise ValueError()
-              if supplied:
-                  path.write_text(supplied)
-          except (ValueError, OSError):
-              print('::error::Firebase JSON must be registered for com.libregram.app. Check GOOGLE_SERVICES_JSON override if set.')
-              sys.exit(1)
-          print('Firebase application identity validated.')
+          import os,json,pathlib
+          p=pathlib.Path('TMessagesProj/google-services.json')
+          text=os.environ.get('GOOGLE_SERVICES_JSON') or p.read_text()
+          data=json.loads(text)
+          assert any(c.get('client_info',{}).get('android_client_info',{}).get('package_name')=='com.libregram.app' for c in data.get('client',[])), 'Wrong Firebase package'
+          p.write_text(text)
           PY
       - uses: actions/setup-java@v4
         with:
@@ -49,10 +42,11 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Check source integration
+      - name: Prepare integrated alpha sources
         run: |
-          python3 Tools/integrate-libregram-startup.py
+          python3 Tools/prepare-alpha.py
           python3 tests/test_libregram_controls.py
+          python3 .github/scripts/verify_libregram_branding.py
       - uses: dtolnay/rust-toolchain@1.98.0
         with:
           targets: aarch64-linux-android
@@ -68,23 +62,13 @@ jobs:
           echo "sdk.dir=${ANDROID_HOME}" >> local.properties
       - name: Build pinned WS JNI library and package license
         run: bash Tools/build-ws-proxy.sh
-      - name: Upload native library for inspection
-        uses: actions/upload-artifact@v4
-        with:
-          name: LibreGram-ws-native-arm64
-          path: |
-            TMessagesProj/jni/arm64-v8a/libtg_ws_proxy_jni.so
-            TMessagesProj/src/main/assets/licenses/tg-ws-proxy-rs-MIT.txt
-          if-no-files-found: error
-      - name: Restore optional existing signing identity
+      - name: Restore optional signing identity
         env:
           RELEASE_KEYSTORE: ${{ secrets.RELEASE_KEYSTORE }}
         run: |
           if [ -n "$RELEASE_KEYSTORE" ]; then
             printf '%s' "$RELEASE_KEYSTORE" | base64 --decode > TMessagesProj/release.keystore
           fi
-      - name: Verify branding
-        run: python3 .github/scripts/verify_libregram_branding.py
       - name: Build debug APK
         run: ./gradlew :TMessagesProj:assembleDebug
       - name: Verify APK package and native payload
@@ -96,7 +80,7 @@ jobs:
           unzip -l "$APK" | grep -F assets/licenses/tg-ws-proxy-rs-MIT.txt
       - uses: actions/upload-artifact@v4
         with:
-          name: LibreGram-feature-debug-arm64
+          name: LibreGram-APK-arm64-${{ github.sha }}
           path: TMessagesProj/build/outputs/apk/debug/*.apk
           if-no-files-found: error
           retention-days: 14
